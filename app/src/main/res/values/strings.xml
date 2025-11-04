@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">NAVI</string>
+
+    <string name="project_logo_name">SeeTogether</string>
+    <string name="project_logo_moto">Help others to see this world!</string>
 </resources>
