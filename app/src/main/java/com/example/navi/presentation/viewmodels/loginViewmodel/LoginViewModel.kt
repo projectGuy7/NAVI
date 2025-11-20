@@ -6,17 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navi.cryptoManager.TokenCryptoManager
 import com.example.navi.data.remote.dto.UserDTO
+import com.example.navi.di.qualifiers.FilesDir
 import com.example.navi.domain.navi.Token
 import com.example.navi.domain.repository.LoginRepository
 import com.example.navi.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val repository: LoginRepository): ViewModel() {
+class LoginViewModel @Inject constructor(val repository: LoginRepository, @param:FilesDir val filesDir: File): ViewModel() {
     var loginState by mutableStateOf(LoginState(
         firstName = "String",
         lastName = "String",
@@ -85,11 +91,13 @@ class LoginViewModel @Inject constructor(val repository: LoginRepository): ViewM
                             Log.i("ERROR", "ERROR WHILE EMAIL VERIFICATION")
                         }
                         is Resource.Success<Token> -> {
-                            Log.i("SUCCESS", "REFRESH")
-                            loginState = loginState.copy(
-                                refreshToken = result.data?.refreshToken,
-                                accessToken = result.data?.accessToken
-                            )
+                            val cryptoManager = TokenCryptoManager()
+                            val file = File(filesDir, "token.txt")
+                            if(!file.exists()) {
+                                file.createNewFile()
+                            }
+                            cryptoManager.encrypt(result.data!!.accessToken.encodeToByteArray(),result.data.refreshToken.encodeToByteArray(), FileOutputStream(file))
+                            loginState = loginState.copy(receivedTokens = true);
                         }
                     }
                 }

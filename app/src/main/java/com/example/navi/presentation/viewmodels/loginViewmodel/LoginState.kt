@@ -11,6 +11,6 @@ data class LoginState(
 
     val sentVerificationCode: Boolean = false,
     val verificationCode: String = "",
-    val refreshToken: String? = null,
-    val accessToken: String? = null
+
+    val receivedTokens: Boolean = false
 )

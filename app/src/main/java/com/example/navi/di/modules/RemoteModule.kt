@@ -1,4 +1,4 @@
-package com.example.navi.di
+package com.example.navi.di.modules
 
 import com.example.navi.data.remote.api.LoginApi
 import dagger.Module

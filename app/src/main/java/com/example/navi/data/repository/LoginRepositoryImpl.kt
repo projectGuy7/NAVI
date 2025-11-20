@@ -9,7 +9,7 @@ import com.example.navi.domain.repository.LoginRepository
 import com.example.navi.domain.util.Resource
 import javax.inject.Inject
 
-class LoginRepositoryImpl @Inject constructor(val api: LoginApi): LoginRepository {
+class LoginRepositoryImpl @Inject constructor(private val api: LoginApi): LoginRepository {
     override suspend fun register(user: UserDTO): Resource<Void> {
         val response = api.register(user)
 
@@ -19,7 +19,8 @@ class LoginRepositoryImpl @Inject constructor(val api: LoginApi): LoginRepositor
             )
         } else {
             Resource.Error(
-                message = formErrorMessage(response)
+                message = formErrorMessage(response),
+                responseCode = response.code()
             )
         }
     }
@@ -36,7 +37,8 @@ class LoginRepositoryImpl @Inject constructor(val api: LoginApi): LoginRepositor
             )
         } else {
             Resource.Error(
-                message = formErrorMessage(response)
+                message = formErrorMessage(response),
+                responseCode = response.code()
             )
         }
     }

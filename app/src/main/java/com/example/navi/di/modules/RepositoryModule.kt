@@ -1,4 +1,4 @@
-package com.example.navi.di
+package com.example.navi.di.modules
 
 import com.example.navi.data.repository.LoginRepositoryImpl
 import com.example.navi.domain.repository.LoginRepository

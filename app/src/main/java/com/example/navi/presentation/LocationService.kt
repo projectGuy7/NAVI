@@ -59,7 +59,6 @@ class LocationService: Service() {
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setOngoing(true)
             .build()
-
         locationClient
             .getLocationUpdates(10000L)
             .catch { e -> e.printStackTrace() }

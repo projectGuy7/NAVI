@@ -2,6 +2,7 @@ package com.example.navi.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
@@ -29,7 +30,7 @@ data object WelcomeScreen: NavKey
 data object LoginWithEmailScreen: NavKey
 
 @Serializable
-data class HomeScreen(val refreshToken: String, val accessToken: String): NavKey
+data object HomeScreen: NavKey
 
 @Composable
 fun NavigationRoot(
@@ -60,8 +61,8 @@ fun NavigationRoot(
                     NavEntry(key) {
                         val loginViewModel = hiltViewModel<LoginViewModel>()
                         val state = loginViewModel.loginState
-                        if(state.accessToken != null && state.refreshToken != null) {
-                            backStack.reset(HomeScreen(refreshToken = state.refreshToken, accessToken = state.accessToken))
+                        if(state.receivedTokens) {
+                            backStack.reset(HomeScreen)
                         }
                         if(!state.sentVerificationCode) {
                             SignInWithEmail(
@@ -85,7 +86,7 @@ fun NavigationRoot(
                             creationCallback = { factory: DisabledViewModelFactory ->
                                 factory.run {
                                     create(DisabledRepositoryImpl(createDisabledApi(AuthorizationInterceptor(
-                                        key.accessToken
+                                        key.accessToken,
                                     ))))
                                 }
                             }
