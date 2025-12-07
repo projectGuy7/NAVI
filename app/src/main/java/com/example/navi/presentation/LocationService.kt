@@ -12,6 +12,7 @@ import androidx.core.app.ServiceCompat
 import com.example.navi.R
 import com.example.navi.data.locationClient.LocationClientImpl
 import com.example.navi.domain.locationClient.LocationClient
+import com.example.navi.domain.repository.DisabledRepository
 import com.example.navi.presentation.locationController.Location
 import com.example.navi.presentation.locationController.LocationController
 import com.google.android.gms.location.LocationServices
@@ -23,9 +24,13 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class LocationService: Service() {
+class DisabledLocationService constructor(): Service() {
+
+    @Inject
+    lateinit var disabledRepository: DisabledRepository
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient

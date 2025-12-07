@@ -5,9 +5,7 @@ import com.example.navi.di.qualifiers.FilesDir
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.dgis.sdk.Context
 import java.io.File
 
 @Module

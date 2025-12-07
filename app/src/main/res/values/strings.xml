@@ -3,4 +3,5 @@
 
     <string name="project_logo_name">SeeTogether</string>
     <string name="project_logo_moto">Help others to see this world!</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
