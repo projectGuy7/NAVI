@@ -55,6 +55,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.text.get
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -128,16 +129,6 @@ class MainActivity : ComponentActivity() {
                         SnackbarHost(snackBarHostState)
                     },
                     bottomBar = if(!backStack.contains(WelcomeScreen)) {
-                        if(permissionViewModel.grantedPermissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-                            Intent(this@MainActivity, DisabledLocationService::class.java).apply {
-                                action = ACTION_START
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    startForegroundService(this)
-                                } else {
-                                    startService(this)
-                                }
-                            }
-                        }
                         { NaviBottomAppBar(
                             onMapPressed = { startActivity(Intent("android.intent.action.MAP")) },
                             onMyRequestsPressed = {},
@@ -146,22 +137,10 @@ class MainActivity : ComponentActivity() {
                     } else { {} }
                 ) { innerPadding ->
                     NavigationRoot(
-                        modifier = Modifier.padding(innerPadding),
+                        modifier = Modifier.fillMaxSize().padding(innerPadding),
                         backStack = backStack
                     )
                 }
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Intent(this, DisabledLocationService::class.java).apply {
-            action = ACTION_STOP
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(this)
-            } else {
-                startService(this)
             }
         }
     }

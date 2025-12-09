@@ -4,4 +4,12 @@
     <string name="project_logo_name">SeeTogether</string>
     <string name="project_logo_moto">Help others to see this world!</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="select_search_radius">Select search radius</string>
+    <string name="search">SEARCH</string>
+    <string-array name="radius_options">
+        <item>1 km</item>
+        <item>3 km</item>
+        <item>5 km</item>
+        <item>10 km</item>
+    </string-array>
 </resources>

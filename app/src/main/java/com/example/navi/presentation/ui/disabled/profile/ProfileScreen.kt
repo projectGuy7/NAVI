@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.navi.presentation.viewmodels.disabledViewModel.DisabledState
+import com.example.navi.presentation.viewmodels.disabled.disabledViewModel.DisabledState
 
 @Composable
 fun ProfileScreen(

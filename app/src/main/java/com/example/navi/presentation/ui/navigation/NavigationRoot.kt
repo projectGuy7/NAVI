@@ -16,19 +16,24 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.navi.di.factories.DisabledViewModelFactory
 import com.example.navi.presentation.ui.disabled.profile.ProfileScreen
-import com.example.navi.presentation.ui.login.WelcomeScreen
-import com.example.navi.presentation.ui.login.signInWithEmail.EmailVerification
-import com.example.navi.presentation.ui.login.signInWithEmail.SignInWithEmail
+import com.example.navi.presentation.ui.auth.WelcomeScreen
+import com.example.navi.presentation.ui.auth.login.LogIn
+import com.example.navi.presentation.ui.auth.signInWithEmail.EmailVerification
+import com.example.navi.presentation.ui.auth.signInWithEmail.SignInWithEmail
 import com.example.navi.presentation.ui.util.reset
-import com.example.navi.presentation.viewmodels.disabledViewModel.DisabledViewModel
-import com.example.navi.presentation.viewmodels.loginViewmodel.LoginViewModel
+import com.example.navi.presentation.viewmodels.disabled.disabledViewModel.DisabledViewModel
+import com.example.navi.presentation.viewmodels.logInViewModel.LogInViewModel
+import com.example.navi.presentation.viewmodels.signInViewModel.SignInViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object WelcomeScreen: NavKey
 
 @Serializable
-data object LoginWithEmailScreen: NavKey
+data object SignInWithEmailScreen: NavKey
+
+@Serializable
+data object LogInScreen: NavKey
 
 @Serializable
 data object HomeScreen: NavKey
@@ -53,31 +58,49 @@ fun NavigationRoot(
                             modifier = modifier,
                             onSignInWithGooglePressed = {}, // TODO
                             onSignInWithEmailPressed = {
-                                backStack.add(LoginWithEmailScreen)
+                                backStack.add(SignInWithEmailScreen)
                             },
-                            onAlreadyHaveAnAccountPressed = {} // TODO
+                            onAlreadyHaveAnAccountPressed = {
+                                backStack.add(LogInScreen)
+                            }
                         )
                     }
                 }
-                LoginWithEmailScreen -> {
+                SignInWithEmailScreen -> {
                     NavEntry(key) {
-                        val loginViewModel = hiltViewModel<LoginViewModel>()
-                        val state = loginViewModel.loginState
+                        val signInViewModel = hiltViewModel<SignInViewModel>()
+                        val state = signInViewModel.state
                         if(state.receivedTokens) {
                             backStack.reset(HomeScreen)
                         }
                         if(!state.sentVerificationCode) {
                             SignInWithEmail(
                                 modifier = modifier,
-                                loginState = state,
-                                onEvent = loginViewModel::onEvent,
+                                state = state,
+                                onEvent = signInViewModel::onEvent,
                                 onBackClicked = { backStack.removeAt(backStack.size - 1) }
                             )
                         } else {
                             EmailVerification(
                                 modifier = modifier,
                                 state = state,
-                                onEvent = loginViewModel::onEvent
+                                onEvent = signInViewModel::onEvent
+                            )
+                        }
+                    }
+                }
+                LogInScreen -> {
+                    NavEntry(key) {
+                        val logInViewModel = hiltViewModel<LogInViewModel>()
+                        val state = logInViewModel.state
+                        if(state.receivedTokens) {
+                            backStack.reset(HomeScreen)
+                        } else {
+                            LogIn(
+                                modifier = Modifier.fillMaxSize().padding(5.dp),
+                                state = state,
+                                onEvent = logInViewModel::onEvent,
+                                onBackClicked = { backStack.removeAt(backStack.size - 1) }
                             )
                         }
                     }

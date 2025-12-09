@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.disabledViewModel
+package com.example.navi.presentation.viewmodels.disabled.disabledViewModel
 
 data class DisabledState(
     val firstName: String = "",

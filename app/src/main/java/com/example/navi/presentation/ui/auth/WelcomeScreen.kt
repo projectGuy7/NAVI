@@ -1,4 +1,4 @@
-package com.example.navi.presentation.ui.login
+package com.example.navi.presentation.ui.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

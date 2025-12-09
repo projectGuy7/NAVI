@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.navi.cryptoManager.TokenCryptoManager
 import com.example.navi.data.mappers.toDisabled
 import com.example.navi.data.mappers.toToken
+import com.example.navi.data.mappers.toVolunteerLocation
 import com.example.navi.data.remote.api.DisabledAPI
 import com.example.navi.data.remote.api.createDisabledApi
 import com.example.navi.data.remote.dto.LocationDTO
@@ -13,6 +14,7 @@ import com.example.navi.data.remote.util.formErrorMessage
 import com.example.navi.di.qualifiers.FilesDir
 import com.example.navi.domain.navi.Disabled
 import com.example.navi.domain.navi.Token
+import com.example.navi.domain.navi.VolunteerLocation
 import com.example.navi.domain.repository.DisabledRepository
 import com.example.navi.domain.util.Resource
 import java.io.File
@@ -53,6 +55,21 @@ class DisabledRepositoryImpl @Inject constructor(@FilesDir filesDir: File): Disa
         return if(response.isSuccessful) {
             Resource.Success(
                 data = null
+            )
+        } else {
+            Resource.Error(
+                message = formErrorMessage(response),
+                responseCode = response.code()
+            )
+        }
+    }
+
+    override suspend fun searchInRadius(radius: Int, location: LocationDTO): Resource<List<VolunteerLocation>> {
+        val response = disabledApi.searchVolunteersInRadius(radius, location)
+
+        return if(response.isSuccessful) {
+            Resource.Success(
+                data = response.body()?.map({ it.toVolunteerLocation() })
             )
         } else {
             Resource.Error(

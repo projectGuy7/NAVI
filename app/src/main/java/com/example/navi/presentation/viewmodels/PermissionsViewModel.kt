@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 class PermissionsViewModel : ViewModel() {
     val permissionQueue = mutableStateListOf<String>()
@@ -21,7 +22,6 @@ class PermissionsViewModel : ViewModel() {
             permissionQueue.add(permission)
         } else if(isGranted) {
             grantedPermissions[permission] = true
-            Log.i("2", "$permission , $grantedPermissions")
         }
     }
 }

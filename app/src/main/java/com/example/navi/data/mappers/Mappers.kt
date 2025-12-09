@@ -2,8 +2,10 @@ package com.example.navi.data.mappers
 
 import com.example.navi.data.remote.dto.DisabledDTO
 import com.example.navi.data.remote.dto.TokenDTO
+import com.example.navi.data.remote.dto.VolunteerLocationDTO
 import com.example.navi.domain.navi.Disabled
 import com.example.navi.domain.navi.Token
+import com.example.navi.domain.navi.VolunteerLocation
 
 fun TokenDTO.toToken() : Token {
     return Token(
@@ -19,5 +21,13 @@ fun DisabledDTO.toDisabled() : Disabled {
         age = this.age.toByte(),
         email = this.email,
         problems = this.problems
+    )
+}
+
+fun VolunteerLocationDTO.toVolunteerLocation(): VolunteerLocation {
+    return VolunteerLocation(
+        longitude = this.longitude,
+        latitude = this.latitude,
+        id = this.userId
     )
 }

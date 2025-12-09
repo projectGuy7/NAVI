@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.disabledViewModel
+package com.example.navi.presentation.viewmodels.disabled.disabledViewModel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -25,7 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
-import javax.inject.Inject
 
 
 @HiltViewModel(assistedFactory = DisabledViewModelFactory::class)
@@ -52,12 +51,8 @@ class DisabledViewModel @AssistedInject constructor(
                 }
                 is Resource.Error<*> -> {
                     Log.i("me()", "${result.message}")
-                    val cryptoManager = TokenCryptoManager()
                     if(result.responseCode == EXPIRED_TOKEN) {
-                        disposeApi(cryptoManager.decrypt(
-                            FileInputStream(File(filesDir, "token.txt"))
-                        ).refreshToken
-                        )
+                        disposeApi()
                     }
                 }
             }
@@ -68,11 +63,15 @@ class DisabledViewModel @AssistedInject constructor(
 
     }
 
-    private fun disposeApi(refreshToken: String) {
+    private fun disposeApi() {
+        val cryptoManager = TokenCryptoManager()
+        val refreshToken = cryptoManager.decrypt(
+            FileInputStream(File(filesDir, "token.txt"))
+        ).refreshToken
         viewModelScope.launch {
             when(val result = disabledRepository.refreshToken(RefreshTokenDTO(refreshToken))) {
                 is Resource.Success -> {
-                    SnackBarController.sendEvent(SnackBarEvent(message = "refreshToken() success"))
+                    SnackBarController.sendEvent(SnackBarEvent(message = "refreshToken() Success"))
                     disabledRepository.disposeApi(accessToken = result.data?.accessToken!!)
                 }
                 is Resource.Error -> {

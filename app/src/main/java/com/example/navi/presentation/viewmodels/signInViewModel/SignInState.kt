@@ -1,6 +1,6 @@
-package com.example.navi.presentation.viewmodels.loginViewmodel
+package com.example.navi.presentation.viewmodels.signInViewModel
 
-data class LoginState(
+data class SignInState(
     val firstName: String = "",
     val lastName: String = "",
     val age: Byte = 0,

@@ -1,8 +1,9 @@
-package com.example.navi.presentation.ui.login.signInWithEmail
+package com.example.navi.presentation.ui.auth.signInWithEmail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -18,20 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.navi.presentation.viewmodels.loginViewmodel.LoginAction
-import com.example.navi.presentation.viewmodels.loginViewmodel.LoginState
+import com.example.navi.presentation.viewmodels.signInViewModel.SignInAction
+import com.example.navi.presentation.viewmodels.signInViewModel.SignInState
 import com.example.navi.ui.theme.NAVITheme
 
 @Composable
 fun SignInWithEmail(
     modifier: Modifier = Modifier,
-    loginState: LoginState,
-    onEvent: (action: LoginAction) -> Unit,
+    state: SignInState,
+    onEvent: (action: SignInAction) -> Unit,
     onBackClicked: () -> Unit
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.Start
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -53,21 +55,21 @@ fun SignInWithEmail(
             )
         }
         Text("First Name")
-        TextField(value = loginState.firstName, onValueChange = { newValue -> onEvent(LoginAction.TypeInFirstName(newValue))})
+        TextField(value = state.firstName, onValueChange = { newValue -> onEvent(SignInAction.TypeInFirstName(newValue))})
         Text("Last Name")
-        TextField(value = loginState.lastName, onValueChange = { newValue -> onEvent(LoginAction.TypeInLastName(newValue))})
+        TextField(value = state.lastName, onValueChange = { newValue -> onEvent(SignInAction.TypeInLastName(newValue))})
         Text("Age")
-        TextField(value = loginState.age.toString(), onValueChange = { newValue -> onEvent(LoginAction.ChooseYearOfBirth(2025 - newValue.toInt()))})
+        TextField(value = state.age.toString(), onValueChange = { newValue -> onEvent(SignInAction.ChooseYearOfBirth(2025 - newValue.toInt()))})
         Text("Email")
-        TextField(value = loginState.email, onValueChange = { newValue -> onEvent(LoginAction.TypeInEmail(newValue))})
+        TextField(value = state.email, onValueChange = { newValue -> onEvent(SignInAction.TypeInEmail(newValue))})
         Text("Password")
-        TextField(value = loginState.password, onValueChange = { newValue -> onEvent(LoginAction.TypeInPassword(newValue))})
+        TextField(value = state.password, onValueChange = { newValue -> onEvent(SignInAction.TypeInPassword(newValue))})
         Text("Volunteer or Disabled")
         Row(modifier = Modifier.padding(top = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(if(loginState.isVolunteer) "Volunteer" else "Disabled")
-            Button(onClick = {onEvent(LoginAction.ChangeRole)}) { Text("Change") }
+            Text(if(state.isVolunteer) "Volunteer" else "Disabled")
+            Button(onClick = {onEvent(SignInAction.ChangeRole)}) { Text("Change") }
         }
-        Button(onClick = {onEvent(LoginAction.CreateUser)}) { Text("Create User") }
+        Button(onClick = {onEvent(SignInAction.CreateUser)}) { Text("Create User") }
     }
 }
 
@@ -79,6 +81,6 @@ fun SignInWithEmail(
 @Composable
 fun SignInWithEmailPreview() {
     NAVITheme {
-        SignInWithEmail(modifier = Modifier.padding(5.dp), onEvent = {}, onBackClicked = {}, loginState = LoginState())
+        SignInWithEmail(modifier = Modifier.fillMaxSize().padding(5.dp), onEvent = {}, onBackClicked = {}, state = SignInState())
     }
 }
