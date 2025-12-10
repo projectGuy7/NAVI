@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.signInViewModel
+package com.example.navi.presentation.viewmodels.auth.signInViewModel
 
 data class SignInState(
     val firstName: String = "",
@@ -9,7 +9,6 @@ data class SignInState(
     val isVolunteer: Boolean = false,
     val problems: String? = null,
 
-    val sentVerificationCode: Boolean = false,
     val verificationCode: String = "",
 
     val receivedTokens: Boolean = false

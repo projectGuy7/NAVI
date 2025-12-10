@@ -3,6 +3,7 @@ package com.example.navi.data.remote.api
 import com.example.navi.data.remote.dto.DisabledDTO
 import com.example.navi.data.remote.dto.LocationDTO
 import com.example.navi.data.remote.dto.RefreshTokenDTO
+import com.example.navi.data.remote.dto.RequestDTO
 import com.example.navi.data.remote.dto.TokenDTO
 import com.example.navi.data.remote.dto.VolunteerLocationDTO
 import retrofit2.Response
@@ -18,6 +19,9 @@ interface DisabledAPI {
 
     @POST("/api/needy/update_location")
     suspend fun updateLocation(@Body location: LocationDTO): Response<Void>
+
+    @POST("/api/needy/request/create")
+    suspend fun createRequest(@Body request: RequestDTO): Response<Void>
 
     @POST("/api/needy/search_in_radius")
     suspend fun searchVolunteersInRadius(

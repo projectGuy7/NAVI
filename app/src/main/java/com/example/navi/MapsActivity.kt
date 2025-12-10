@@ -89,29 +89,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Intent(this@MapsActivity, DisabledLocationService::class.java).apply {
-            action = ACTION_START
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(this)
-            } else {
-                startService(this)
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Intent(applicationContext, DisabledLocationService::class.java).apply {
-            action = ACTION_STOP
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(this)
-            } else {
-                startService(this)
-            }
-        }
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        Intent(applicationContext, DisabledLocationService::class.java).apply {
+//            action = ACTION_STOP
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(this)
+//            } else {
+//                startService(this)
+//            }
+//        }
+//    }
 
     /**
      * Manipulates the map once available.

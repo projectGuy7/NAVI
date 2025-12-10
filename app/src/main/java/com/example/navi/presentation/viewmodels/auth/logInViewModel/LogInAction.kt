@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.logInViewModel
+package com.example.navi.presentation.viewmodels.auth.logInViewModel
 
 sealed class LogInAction {
     data class TypeInEmail(val email: String): LogInAction()

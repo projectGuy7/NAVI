@@ -16,7 +16,7 @@ import com.example.navi.domain.repository.DisabledRepository
 import com.example.navi.domain.util.Resource
 import com.example.navi.presentation.snackBarController.SnackBarController
 import com.example.navi.presentation.snackBarController.SnackBarEvent
-import com.example.navi.presentation.ui.navigation.WelcomeScreen
+import com.example.navi.presentation.ui.navigation.Route
 import com.example.navi.presentation.ui.util.reset
 import com.example.navi.presentation.viewmodels.EXPIRED_TOKEN
 import dagger.assisted.Assisted
@@ -59,8 +59,12 @@ class DisabledViewModel @AssistedInject constructor(
         }
     }
 
-    fun onEvent() {
-
+    fun onEvent(action: DisabledAction) {
+        when(action) {
+            is DisabledAction.AddToRequestsList -> {
+                // TODO
+            }
+        }
     }
 
     private fun disposeApi() {
@@ -75,9 +79,10 @@ class DisabledViewModel @AssistedInject constructor(
                     disabledRepository.disposeApi(accessToken = result.data?.accessToken!!)
                 }
                 is Resource.Error -> {
+                    Log.i("Hey", "disposeApi() Error")
                     SnackBarController.sendEvent(SnackBarEvent(message = result.message ?: "disposeApi() Error"))
                     if(result.responseCode == EXPIRED_TOKEN) {
-                        backStack.reset(WelcomeScreen)
+                        backStack.reset(Route.AuthenticationScreen)
                     }
                 }
             }

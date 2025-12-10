@@ -12,13 +12,16 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -41,9 +44,8 @@ import com.example.navi.presentation.snackBarController.SnackBarController
 import com.example.navi.presentation.ui.NaviBottomAppBar
 import com.example.navi.presentation.ui.PermissionDialog
 import com.example.navi.presentation.ui.PreciseLocationPermissionText
-import com.example.navi.presentation.ui.navigation.HomeScreen
 import com.example.navi.presentation.ui.navigation.NavigationRoot
-import com.example.navi.presentation.ui.navigation.WelcomeScreen
+import com.example.navi.presentation.ui.navigation.Route
 import com.example.navi.presentation.viewmodels.PermissionsViewModel
 import com.example.navi.ui.theme.NAVITheme
 import com.google.android.gms.common.api.ResolvableApiException
@@ -55,16 +57,18 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import javax.inject.Inject
 import kotlin.text.get
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     private val permissionsToRequest = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             val permissionViewModel: PermissionsViewModel by viewModels()
             val dialogQueue = permissionViewModel.permissionQueue
@@ -108,6 +112,17 @@ class MainActivity : ComponentActivity() {
                 }
             checkLocationSettingsResolution()
 
+            if(permissionViewModel.grantedPermissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false) {
+                Intent(this@MainActivity, DisabledLocationService::class.java).apply {
+                    action = ACTION_START
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(this)
+                    } else {
+                        startService(this)
+                    }
+                }
+            }
+
             val snackBarHostState = remember { SnackbarHostState() }
             ObserveAsEvents(SnackBarController.events) { event ->
                 snackBarHostState.currentSnackbarData?.dismiss()
@@ -121,18 +136,25 @@ class MainActivity : ComponentActivity() {
                     event.action?.action?.invoke()
                 }
             }
-            val backStack = rememberNavBackStack<NavKey>(WelcomeScreen)
+
+            val backStack = rememberNavBackStack<NavKey>()
+            if(File(filesDir, "token.txt").run{ exists() && length() > 0 }) {
+                backStack.add(Route.DisabledProfileScreen)
+            } else {
+                backStack.add(Route.AuthenticationScreen)
+            }
+
             NAVITheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = {
                         SnackbarHost(snackBarHostState)
                     },
-                    bottomBar = if(!backStack.contains(WelcomeScreen)) {
+                    bottomBar = if(!backStack.contains(Route.AuthenticationScreen)) {
                         { NaviBottomAppBar(
                             onMapPressed = { startActivity(Intent("android.intent.action.MAP")) },
-                            onMyRequestsPressed = {},
-                            onProfilePressed = { backStack.add(HomeScreen) }
+                            onMyRequestsPressed = { backStack.add(Route.DisabledRequestsScreen) },
+                            onProfilePressed = { backStack.add(Route.DisabledProfileScreen) }
                         ) }
                     } else { {} }
                 ) { innerPadding ->

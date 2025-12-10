@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.logInViewModel
+package com.example.navi.presentation.viewmodels.auth.logInViewModel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navi.cryptoManager.TokenCryptoManager
-import com.example.navi.data.remote.dto.TokenDTO
 import com.example.navi.di.qualifiers.FilesDir
 import com.example.navi.domain.navi.Token
 import com.example.navi.domain.repository.LoginRepository

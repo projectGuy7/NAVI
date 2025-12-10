@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.signInViewModel
+package com.example.navi.presentation.viewmodels.auth.signInViewModel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -56,7 +56,7 @@ class SignInViewModel @Inject constructor(val repository: LoginRepository, @para
             is SignInAction.TypeInProblems -> {
                 state = state.copy(problems = loginAction.problems)
             }
-            SignInAction.CreateUser -> {
+            is SignInAction.CreateUser -> {
                 viewModelScope.launch {
                     when(val result = repository.register(
                         UserDTO(
@@ -73,8 +73,7 @@ class SignInViewModel @Inject constructor(val repository: LoginRepository, @para
                             Log.i("ERROR", "ERROR WHILE REGISTERING")
                         }
                         is Resource.Success<*> -> {
-                            Log.i("SUCCESS", "REGISTERED SUCCESSFULLY")
-                            state = state.copy(sentVerificationCode = true)
+                            loginAction.transitionToScreen()
                         }
                     }
 

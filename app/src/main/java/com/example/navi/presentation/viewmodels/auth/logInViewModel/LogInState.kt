@@ -1,4 +1,4 @@
-package com.example.navi.presentation.viewmodels.logInViewModel
+package com.example.navi.presentation.viewmodels.auth.logInViewModel
 
 data class LogInState(
     val email: String = "",
